@@ -1,0 +1,4 @@
+2018-01-19 09:38:22 Found 30 prime numbers (starting at 16 bit) in 0.056 seconds with a grouping factor of 181
+2018-01-19 09:39:01 Found 30 prime numbers (starting at 64 bit) in 0.074 seconds with a grouping factor of 645
+2018-01-19 09:39:12 Found 30 prime numbers (starting at 256 bit) in 0.202 seconds with a grouping factor of 2610
+2018-01-19 09:39:35 Found 30 prime numbers (starting at 1024 bit) in 16.956 seconds with a grouping factor of 9136

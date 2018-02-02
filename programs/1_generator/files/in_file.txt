@@ -1,0 +1,2 @@
+bitSize		1024
+outFilePath	files/out_file.txt

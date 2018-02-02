@@ -1,0 +1,1 @@
+2018-01-30 20:40:15 --> Random number of size 1024 found in 1.512000 seconds 

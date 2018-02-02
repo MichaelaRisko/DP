@@ -1,0 +1,2 @@
+numSize: 1024
+bnGenCount: 20000
