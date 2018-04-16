@@ -8,7 +8,7 @@
  * Student: Bc. Michaela Risko
  * Supervisor: doc. Ing. Milos Drutarovsky, PhD.
  *
- * REV 2.0 @ 30.01.2018
+ * REV 1.0 @ 08.04.2018
  */
 
 #include <stdio.h>
@@ -30,6 +30,9 @@
 //File path variables
 const char* OUT_FILE_PATH = "files/out_file.txt";
 const char* IN_FILE_PATH = "files/in_file.txt";
+const char* BN_FILE_PATH = "files/bn_file.txt";
+
+const int CORE_LOOP = 50;
 
 //global vars
 long executionTimeRaw = 0;
@@ -42,14 +45,14 @@ long executionTimeRaw = 0;
  * for this counter to overflow. Appropriate exception handling is in place.
  * @param fromNum
  *			the number from which the next prime number is to be found
- * @param count
+ * @param bnGenCount
  *			the number of prime numbers to be found from 'fromNum'
  *
  * @return the number of increments (by 2) needed in order to find all
  * 			of the requested prime numbers
  */
-unsigned long measureGrouping(BIGNUM* fromNum, int count) {
-	if(count < 1) {
+unsigned long measureGrouping(BIGNUM* fromNum, int bnGenCount) {
+	if(bnGenCount < 1) {
 		BNUTIL_successCheck(FALSE, "measureGrouping", "function parameter "
 			"'count' must be > 0");
 	}
@@ -62,26 +65,89 @@ unsigned long measureGrouping(BIGNUM* fromNum, int count) {
 		//If numFrom is even, add 1
 		BNEASY_add(number, 1, FALSE);
 	}
+	
 	clock_t timerStart;
 	clock_t timerEnd;
 	executionTimeRaw = 0;
-	while(numPrimesFound < count) {
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////
+//	while(numPrimesFound < count) {
+//		timerStart = clock();
+//		if(BNEASY_isPrime(number)) {
+//			numPrimesFound++;
+//			printf("\r...found prime %d/%d...", numPrimesFound, count);
+//		}
+//		BNEASY_add(number, 2, FALSE);
+//		numIncrements++;
+//		if(numIncrements == ULONG_MAX) {
+//			BNUTIL_successCheck(FALSE, "measureGrouping", "unsigned long "
+//				"numIncrements overflow");
+//		}
+//		timerEnd = clock();
+//		executionTimeRaw += timerEnd - timerStart;
+//	} 
+
+	BIGNUM* temp = BN_new();
+	BIGNUM* wTemp = BN_new();
+	BN_CTX* ctx = BN_CTX_new();
+	BIGNUM w[CORE_LOOP][2];
+	bool init = TRUE;
+	int count = 0;
+	
+	while(count != bnGenCount) {
 		timerStart = clock();
-		if(BNEASY_isPrime(number)) {
-			numPrimesFound++;
-			printf("\r...found prime %d/%d...", numPrimesFound, count);
+		
+		int i;
+		for(i = 0; i < CORE_LOOP; i++) {
+			if(init == TRUE) {
+				//create initial row
+				temp = BN_dup(fromNum);
+				BNEASY_add(temp, -2, FALSE);
+				w[i][0] = *temp;
+//				printf("w0[%d] = ", i - 1);
+//				BNUTIL_cPrintln(&w0[i - 1]);
+				init = FALSE;
+			} else {
+				//copy second row to first
+				w[i][0] = w[i][1];
+			}
+			
+			BIGNUM* wTemp = BN_dup(&w[i][0]);
+			BNEASY_add(wTemp, 2, FALSE);
+			BN_mod(temp, wTemp, BNUTIL_getSmallPrime(i), ctx);
+			w[i][1] = *temp;
 		}
+		
+		//is 0 in the column?
+		bool hasZero = FALSE;
+		for(i = 0; i < CORE_LOOP; i++) {
+			if(BN_is_zero(&w[i][1])) {
+				hasZero = TRUE;
+			}
+		}
+		
+		//if 0 is not in column, do R-M test
+		if(hasZero == FALSE) {
+			//R-M test
+			if(BNEASY_isPrime(number) == TRUE) {
+				count++;
+			}
+		}
+		
+		
+		//n = n + 2
 		BNEASY_add(number, 2, FALSE);
-		numIncrements++;
-		if(numIncrements == ULONG_MAX) {
-			BNUTIL_successCheck(FALSE, "measureGrouping", "unsigned long "
-				"numIncrements overflow");
-		}
+		
 		timerEnd = clock();
 		executionTimeRaw += timerEnd - timerStart;
-	} 
+	}
+
+
 	printf("\n");
 	BN_free(number);
+	BN_free(temp);
+	BN_free(wTemp);
+	BN_CTX_free(ctx);
 	
 	//remove extra increment after BNEASY_isPrime(number) check
 	return numIncrements - 1;
@@ -125,12 +191,6 @@ void writeResultToFile(const char* filePath, float duration,
 
 int main() {
 	printf("Program started...\n");
-//	writeResultToFile(OUT_FILE_PATH, duration, grouping, bnGenCount, numBits);
-//	float duration = 3.232;
-//	unsigned long grouping = 2143242;
-//	
-//	bnGenCount = 4;
-	
 		
 	char bnGenCount_str[16];
 	char bn_str[1024];

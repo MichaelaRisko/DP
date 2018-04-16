@@ -11,10 +11,3 @@
 2018-02-26 19:18:57 Found 10 prime numbers (starting at 1024 bit) in 4.803 seconds with a grouping factor of 2551
 
 2018-03-11 15:26:32 Found 10000 prime numbers (starting at 1024 bit) in 6611.672 seconds with a grouping factor of 3581860
-2018-03-30 14:11:17 Found 10 prime numbers (starting at 2048 bit) in 159.767 seconds with a grouping factor of 11739
-2018-03-30 14:33:23 Found 100 prime numbers (starting at 2048 bit) in 1112.846 seconds with a grouping factor of 81694
-
-2018-03-30 14:38:45 Found 100 prime numbers (starting at 256 bit) in 0.551 seconds with a grouping factor of 8798
-2018-03-30 14:39:35 Found 100 prime numbers (starting at 512 bit) in 4.892 seconds with a grouping factor of 18442
-2018-03-30 14:41:44 Found 100 prime numbers (starting at 1048 bit) in 60.527 seconds with a grouping factor of 31116
-2018-03-30 14:59:59 Found 100 prime numbers (starting at 2048 bit) in 868.626 seconds with a grouping factor of 63797

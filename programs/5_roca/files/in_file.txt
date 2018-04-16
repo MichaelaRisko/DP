@@ -1,2 +1,2 @@
 bnGenCount		
-30
+10000

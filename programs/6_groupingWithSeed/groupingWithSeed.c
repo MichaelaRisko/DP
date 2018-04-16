@@ -8,7 +8,6 @@
  * Student: Bc. Michaela Risko
  * Supervisor: doc. Ing. Milos Drutarovsky, PhD.
  *
- * REV 2.0 @ 30.01.2018
  */
 
 #include <stdio.h>
@@ -30,6 +29,7 @@
 //File path variables
 const char* OUT_FILE_PATH = "files/out_file.txt";
 const char* IN_FILE_PATH = "files/in_file.txt";
+const char* BN_FILE_PATH = "files/bn_file.txt";
 
 //global vars
 long executionTimeRaw = 0;
