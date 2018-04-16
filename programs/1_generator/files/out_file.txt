@@ -1,1 +1,8 @@
 2018-01-30 20:40:15 --> Random number of size 1024 found in 1.512000 seconds 
+2018-03-30 14:05:16 --> Random number of size 2048 found in 30.388000 seconds 
+2018-03-30 14:06:28 --> Random number of size 2048 found in 10.946000 seconds 
+2018-03-30 14:37:00 --> Random number of size 4096 found in 25.224001 seconds 
+2018-03-30 14:38:14 --> Random number of size 256 found in 0.177000 seconds 
+2018-03-30 14:39:05 --> Random number of size 512 found in 0.103000 seconds 
+2018-03-30 14:40:14 --> Random number of size 1048 found in 1.264000 seconds 
+2018-03-30 14:45:06 --> Random number of size 2048 found in 2.904000 seconds 

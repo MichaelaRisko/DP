@@ -3,7 +3,7 @@
  * Department of Electronics and Multimedia Telecommunications
  *
  * Masters Thesis
- * Prime Number Generation for Embedded Cryptographic Applications
+ * Generating Prime Numbers for Embedded Cryptographic Applications
  * 
  * Student: Bc. Michaela Risko
  * Supervisor: doc. Ing. Milos Drutarovsky, PhD.

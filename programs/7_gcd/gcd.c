@@ -8,7 +8,7 @@
  * Student: Bc. Michaela Risko
  * Supervisor: doc. Ing. Milos Drutarovsky, PhD.
  *
- * REV 2.0 @ 30.01.2018
+ * REV 1.0 @ 08.04.2018
  */
 
 #include <stdio.h>
@@ -48,7 +48,7 @@ long executionTimeRaw = 0;
  * @return the number of increments (by 2) needed in order to find all
  * 			of the requested prime numbers
  */
-unsigned long measureGrouping(BIGNUM* fromNum, int count) {
+unsigned long measureGrouping(int primorial, BIGNUM* fromNum, int count) {
 	if(count < 1) {
 		BNUTIL_successCheck(FALSE, "measureGrouping", "function parameter "
 			"'count' must be > 0");
@@ -65,23 +65,63 @@ unsigned long measureGrouping(BIGNUM* fromNum, int count) {
 	clock_t timerStart;
 	clock_t timerEnd;
 	executionTimeRaw = 0;
+	
+	BIGNUM* gcd_result = BN_new();
+	//constant 1
+	BIGNUM* ONE = BN_new();
+	BN_set_word(ONE, 1);
+	
+	BIGNUM* primorial_bn = BN_new();
+	int success = BN_set_word(primorial_bn, primorial);
+	BNUTIL_successCheck(success, "measureGrouping", "Error setting"
+		" Big Number word");
+	
+	BN_CTX* ctx = BN_CTX_new();
+	
 	while(numPrimesFound < count) {
+//		printf("loop\n");
 		timerStart = clock();
-		if(BNEASY_isPrime(number)) {
-			numPrimesFound++;
-			printf("\r...found prime %d/%d...", numPrimesFound, count);
+		
+		BN_gcd(gcd_result, number, primorial_bn, ctx);
+//		printf("bn: ");
+//		BNUTIL_cPrintln(number);
+//		printf("gcd result: ");
+//		BNUTIL_cPrintln(gcd_result);
+		//int gcdOne = BN_is_one(gcd_result);
+		int gcdTest = BN_cmp(ONE, gcd_result);
+//		printf("gcdTest: %d \n", gcdTest);
+		
+		//printf("gcd is 1?: %d \n", gcdOne);
+		//testovat ak GCD je rovny 1
+		//if(gcdOne == 1) {
+		if(gcdTest == 0)
+		{
+//			printf("true\n");
+			if(BNEASY_isPrime(number)) {
+			printf("prime found\n");
+				numPrimesFound++;
+				printf("\r...found prime %d/%d...", numPrimesFound, count);
+			}
+			numIncrements++;
+			if(numIncrements == ULONG_MAX) {
+				BNUTIL_successCheck(FALSE, "measureGrouping", "unsigned long "
+					"numIncrements overflow");
+			}
+		} else {
+//			printf("false\n");
 		}
+		
 		BNEASY_add(number, 2, FALSE);
-		numIncrements++;
-		if(numIncrements == ULONG_MAX) {
-			BNUTIL_successCheck(FALSE, "measureGrouping", "unsigned long "
-				"numIncrements overflow");
-		}
+		
 		timerEnd = clock();
 		executionTimeRaw += timerEnd - timerStart;
 	} 
 	printf("\n");
+	BN_free(gcd_result);
 	BN_free(number);
+	BN_free(primorial_bn);
+	BN_free(ONE);
+	BN_CTX_free(ctx);
 	
 	//remove extra increment after BNEASY_isPrime(number) check
 	return numIncrements - 1;
@@ -125,31 +165,39 @@ void writeResultToFile(const char* filePath, float duration,
 
 int main() {
 	printf("Program started...\n");
-//	writeResultToFile(OUT_FILE_PATH, duration, grouping, bnGenCount, numBits);
-//	float duration = 3.232;
-//	unsigned long grouping = 2143242;
-//	
-//	bnGenCount = 4;
-	
 		
+	char primorial_str[16];
 	char bnGenCount_str[16];
 	char bn_str[1024];
 	
+	int primorial;
+	int bnGenCount;
+	BIGNUM* bn;
+	
 	printf("...reading params from input file...\n");
+	FILEOPS_loadParamFromFile(IN_FILE_PATH, "primorial", primorial_str);
 	FILEOPS_loadParamFromFile(IN_FILE_PATH, "bnGenCount", bnGenCount_str);
 	FILEOPS_loadParamFromFile(IN_FILE_PATH, "bn", bn_str);
 	
-	int bnGenCount = atoi(bnGenCount_str);
-	BIGNUM* bn = NULL;
+	primorial = atoi(primorial_str);
+	bnGenCount = atoi(bnGenCount_str);
+	bn = NULL;
 	BN_hex2bn(&bn, bn_str);
 	printf("...all params from input file read successfully...\n");
+	
+	
+//	printf("primorial: %d", primorial);
+//	printf("bnGenCount: %d", bnGenCount);
+//	printf("primer: ");
+//	BNUTIL_cPrintln(bn);
 	
 	printf("BIGNUM loaded from file: ");
 	BNUTIL_cPrintln(bn);
 	printf("Loaded bnGenCount = %d from file...\n", bnGenCount);
+	printf("Loaded primorial = %d from file...\n", primorial);
 	printf("Executing experiment 'measureGrouping'...\n");
 //	clock_t start = clock();
-	unsigned long grouping = measureGrouping(bn, bnGenCount);
+	unsigned long grouping = measureGrouping(primorial, bn, bnGenCount);
 	printf("Experiment finished! Grouping found: %lu\n", grouping);
 //	clock_t end = clock();
 	float duration = (float)(executionTimeRaw) / CLOCKS_PER_SEC;
