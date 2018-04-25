@@ -33,6 +33,7 @@ const char* IN_FILE_PATH = "files/in_file.txt";
 
 //global vars
 long executionTimeRaw = 0;
+long numExecutionsRM = 0;
 
 /*
  * This function calculates the number of increments of 2 that are needed in
@@ -52,6 +53,7 @@ unsigned long measureGrouping(BIGNUM* fromNum, int count) {
 	if(count < 1) {
 		BNUTIL_successCheck(FALSE, "measureGrouping", "function parameter "
 			"'count' must be > 0");
+			return EXIT_FAILURE;
 	}
 	//Create a duplicat number
 	BIGNUM* number = BN_dup(fromNum);
@@ -67,7 +69,9 @@ unsigned long measureGrouping(BIGNUM* fromNum, int count) {
 	executionTimeRaw = 0;
 	while(numPrimesFound < count) {
 		timerStart = clock();
-		if(BNEASY_isPrime(number)) {
+		bool isPrime = BNEASY_isPrime(number);
+		numExecutionsRM++;
+		if(isPrime) {
 			numPrimesFound++;
 			printf("\r...found prime %d/%d...", numPrimesFound, count);
 		}
@@ -105,7 +109,8 @@ unsigned long measureGrouping(BIGNUM* fromNum, int count) {
  *
  */
 void writeResultToFile(const char* filePath, float duration,
-								int grouping, int primeNums, int numBits) {
+								int grouping, int primeNums, int numBits,
+								long numExecutionsRM) {
 	printf("writing result to file...\n");
 	char timestamp[20];
 	BNUTIL_setTimestampNow(timestamp);
@@ -113,9 +118,10 @@ void writeResultToFile(const char* filePath, float duration,
 	
 	char dur[1024];
 	char text[] = " Found %d prime numbers (starting at %d bit) in %.3f "
-						"seconds with a grouping factor of %lu\n";
+						"seconds with a grouping factor of %lu and %ld "
+						"primality tests.\n";
 	int charsWritten = snprintf(dur, 1024, text, primeNums, numBits,
-	duration, grouping);
+	duration, grouping, numExecutionsRM);
 	if(charsWritten < 0) {
 		BNUTIL_successCheck(FALSE, "writeResultToFile", "Error "
 								"executing snprintf");
@@ -154,7 +160,7 @@ int main() {
 //	clock_t end = clock();
 	float duration = (float)(executionTimeRaw) / CLOCKS_PER_SEC;
 	int numBits = BN_num_bytes(bn) * 8;
-	writeResultToFile(OUT_FILE_PATH, duration, grouping, bnGenCount, numBits);
+	writeResultToFile(OUT_FILE_PATH, duration, grouping, bnGenCount, numBits, numExecutionsRM);
 	
 	printf("Program terminated with success...");
 

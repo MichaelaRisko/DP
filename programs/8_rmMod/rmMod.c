@@ -30,12 +30,13 @@
 //File path variables
 const char* OUT_FILE_PATH = "files/out_file.txt";
 const char* IN_FILE_PATH = "files/in_file.txt";
-const char* BN_FILE_PATH = "files/bn_file.txt";
+//const char* BN_FILE_PATH = "files/bn_file.txt";
 
 const int CORE_LOOP = 50;
 
 //global vars
 long executionTimeRaw = 0;
+long numExecutionsRM = 0;
 
 /*
  * This function calculates the number of increments of 2 that are needed in
@@ -51,8 +52,8 @@ long executionTimeRaw = 0;
  * @return the number of increments (by 2) needed in order to find all
  * 			of the requested prime numbers
  */
-unsigned long measureGrouping(BIGNUM* fromNum, int bnGenCount) {
-	if(bnGenCount < 1) {
+unsigned long measureGrouping(BIGNUM* fromNum, int count) {
+	if(count < 1) {
 		BNUTIL_successCheck(FALSE, "measureGrouping", "function parameter "
 			"'count' must be > 0");
 	}
@@ -92,51 +93,66 @@ unsigned long measureGrouping(BIGNUM* fromNum, int bnGenCount) {
 	BN_CTX* ctx = BN_CTX_new();
 	BIGNUM w[CORE_LOOP][2];
 	bool init = TRUE;
-	int count = 0;
 	
-	while(count != bnGenCount) {
+	while(numPrimesFound < count) {
+		
 		timerStart = clock();
 		
 		int i;
 		for(i = 0; i < CORE_LOOP; i++) {
+//			printf("i=%d\n", i);
 			if(init == TRUE) {
 				//create initial row
-				temp = BN_dup(fromNum);
+				temp = BN_dup(number);
 				BNEASY_add(temp, -2, FALSE);
 				w[i][0] = *temp;
 //				printf("w0[%d] = ", i - 1);
 //				BNUTIL_cPrintln(&w0[i - 1]);
-				init = FALSE;
 			} else {
 				//copy second row to first
 				w[i][0] = w[i][1];
 			}
 			
+//			printf("w[i][0]=\n");
+//			BNUTIL_cPrintln(&w[i][0]);
 			BIGNUM* wTemp = BN_dup(&w[i][0]);
 			BNEASY_add(wTemp, 2, FALSE);
 			BN_mod(temp, wTemp, BNUTIL_getSmallPrime(i), ctx);
 			w[i][1] = *temp;
+//			printf("w[i][1]=\n");
+//			BNUTIL_cPrintln(&w[i][1]);
+//			printf("\n");
 		}
+		init = FALSE;
 		
 		//is 0 in the column?
 		bool hasZero = FALSE;
 		for(i = 0; i < CORE_LOOP; i++) {
 			if(BN_is_zero(&w[i][1])) {
 				hasZero = TRUE;
+//				printf("HAS ZERO!!!!\n");
+			} else {
+//				printf("NO ZERO!!!!\n");
+				
 			}
 		}
-		
+//		printf("has a zero = %d\n", hasZero);
 		//if 0 is not in column, do R-M test
 		if(hasZero == FALSE) {
 			//R-M test
-			if(BNEASY_isPrime(number) == TRUE) {
-				count++;
+//			printf("testing fron number:\n");
+//			BNUTIL_cPrintln(number);
+			bool isPrime = BNEASY_isPrime(number);
+			numExecutionsRM++;
+			if(isPrime == TRUE) {
+				numPrimesFound++;
 			}
 		}
-		
+//		printf("NUMPRIMESFOUND: %d\n", numPrimesFound);
 		
 		//n = n + 2
 		BNEASY_add(number, 2, FALSE);
+		numIncrements++;
 		
 		timerEnd = clock();
 		executionTimeRaw += timerEnd - timerStart;
@@ -179,9 +195,10 @@ void writeResultToFile(const char* filePath, float duration,
 	
 	char dur[1024];
 	char text[] = " Found %d prime numbers (starting at %d bit) in %.3f "
-						"seconds with a grouping factor of %lu\n";
+						"seconds with a grouping factor of %lu and %ld "
+						"primality tests.\n";
 	int charsWritten = snprintf(dur, 1024, text, primeNums, numBits,
-	duration, grouping);
+	duration, grouping, numExecutionsRM);
 	if(charsWritten < 0) {
 		BNUTIL_successCheck(FALSE, "writeResultToFile", "Error "
 								"executing snprintf");
@@ -219,4 +236,5 @@ int main() {
 	printf("Program terminated with success...");
 
 	return EXIT_SUCCESS;
+	
 }

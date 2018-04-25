@@ -33,6 +33,7 @@ const char* IN_FILE_PATH = "files/in_file.txt";
 
 //global vars
 long executionTimeRaw = 0;
+long numExecutionsRM = 0;
 
 /*
  * This function calculates the number of increments of 2 that are needed in
@@ -97,12 +98,14 @@ unsigned long measureGrouping(int primorial, BIGNUM* fromNum, int count) {
 		if(gcdTest == 0)
 		{
 //			printf("true\n");
-			if(BNEASY_isPrime(number)) {
+			bool isPrime = BNEASY_isPrime(number);
+			numExecutionsRM++;
+			if(isPrime) {
 			printf("prime found\n");
 				numPrimesFound++;
 				printf("\r...found prime %d/%d...", numPrimesFound, count);
 			}
-			numIncrements++;
+//			numIncrements++;
 			if(numIncrements == ULONG_MAX) {
 				BNUTIL_successCheck(FALSE, "measureGrouping", "unsigned long "
 					"numIncrements overflow");
@@ -112,6 +115,7 @@ unsigned long measureGrouping(int primorial, BIGNUM* fromNum, int count) {
 		}
 		
 		BNEASY_add(number, 2, FALSE);
+		numIncrements++;
 		
 		timerEnd = clock();
 		executionTimeRaw += timerEnd - timerStart;
@@ -153,9 +157,10 @@ void writeResultToFile(const char* filePath, float duration,
 	
 	char dur[1024];
 	char text[] = " Found %d prime numbers (starting at %d bit) in %.3f "
-						"seconds with a grouping factor of %lu\n";
+						"seconds with a grouping factor of %lu and %ld "
+						"primality tests.\n";
 	int charsWritten = snprintf(dur, 1024, text, primeNums, numBits,
-	duration, grouping);
+	duration, grouping, numExecutionsRM);
 	if(charsWritten < 0) {
 		BNUTIL_successCheck(FALSE, "writeResultToFile", "Error "
 								"executing snprintf");

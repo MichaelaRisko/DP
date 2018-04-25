@@ -18,3 +18,5 @@
 2018-03-30 14:39:35 Found 100 prime numbers (starting at 512 bit) in 4.892 seconds with a grouping factor of 18442
 2018-03-30 14:41:44 Found 100 prime numbers (starting at 1048 bit) in 60.527 seconds with a grouping factor of 31116
 2018-03-30 14:59:59 Found 100 prime numbers (starting at 2048 bit) in 868.626 seconds with a grouping factor of 63797
+2018-04-25 07:20:52 Found 5 prime numbers (starting at 2048 bit) in 42.847 seconds with a grouping factor of 3164 and  primality tests.
+2018-04-25 07:22:34 Found 5 prime numbers (starting at 2048 bit) in 42.547 seconds with a grouping factor of 3164 and 3165 primality tests.
