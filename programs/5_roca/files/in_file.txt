@@ -1,2 +1,0 @@
-bnGenCount		
-10000

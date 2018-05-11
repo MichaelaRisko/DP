@@ -1,0 +1,1 @@
+2018-04-27 06:15:18 Found 1000 prime numbers in 2.236 seconds requiring 18661 number generations and 18661 primality tests.

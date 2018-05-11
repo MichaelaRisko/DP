@@ -1,7 +1,0 @@
-2018-04-21 01:26:05 Found 10 prime numbers (starting at 2048 bit) in 116.078 seconds with a grouping factor of 6006
-2018-04-21 13:47:41 Found 10 prime numbers (starting at 256 bit) in 0.140 seconds with a grouping factor of 1457
-2018-04-21 13:47:57 Found 10 prime numbers (starting at 512 bit) in 0.703 seconds with a grouping factor of 4299
-2018-04-21 13:48:18 Found 10 prime numbers (starting at 1024 bit) in 7.484 seconds with a grouping factor of 8084
-2018-04-21 13:49:34 Found 10 prime numbers (starting at 2048 bit) in 65.110 seconds with a grouping factor of 9543
-2018-04-21 14:04:26 Found 10 prime numbers (starting at 2048 bit) in 80.972 seconds with a grouping factor of 12020
-2018-04-25 07:50:58 Found 5 prime numbers (starting at 2048 bit) in 15.454 seconds with a grouping factor of 2273 and 1137 primality tests.

@@ -1,8 +1,0 @@
-outFilePath	
-files/out_file.txt
-
-seed		2658952
-
-byteSize	256
-
-iterations	3

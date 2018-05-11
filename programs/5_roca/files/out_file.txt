@@ -1,4 +1,0 @@
-2018-02-05 12:29:21 Found 10 prime numbers (1024 bit) in 1.525 seconds requiring 669 number generations
-2018-02-05 12:29:47 Found 10 prime numbers (1024 bit) in 1.049 seconds requiring 432 number generations
-2018-02-05 12:30:11 Found 30 prime numbers (1024 bit) in 3.590 seconds requiring 1575 number generations
-2018-03-11 17:11:57 Found 10000 prime numbers (1024 bit) in 1331.703 seconds requiring 599538 number generations

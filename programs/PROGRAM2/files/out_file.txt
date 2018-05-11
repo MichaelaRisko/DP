@@ -1,0 +1,15 @@
+2018-05-10 11:53:03 New experiment started...
+Prime found: A0B12365984515
+Prime found: A0B1236598454B
+Prime found: A0B12365984587
+Prime found: A0B123659845A7
+Prime found: A0B123659845E1
+Prime found: A0B123659845FF
+Prime found: A0B12365984601
+Prime found: A0B12365984617
+Prime found: A0B1236598461D
+Prime found: A0B1236598461F
+2018-05-10 11:53:03 Found 10 prime numbers (starting at 56 bit) in 0.170 seconds with a grouping factor of 133 and 25 primality tests.
+2018-05-10 11:58:29 Found 10 prime numbers (starting at 56 bit) in 0.190 seconds with a grouping factor of 133 and 25 primality tests.
+2018-05-10 11:59:17 Found 10 prime numbers (starting at 56 bit) in 0.110 seconds with a grouping factor of 133 and 25 primality tests.
+2018-05-10 11:59:34 Found 10 prime numbers (starting at 56 bit) in 0.106 seconds with a grouping factor of 133 and 25 primality tests.

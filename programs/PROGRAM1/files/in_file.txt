@@ -1,0 +1,4 @@
+bnGenCount 10
+
+bn A0B12365984512
+printPrimes 1

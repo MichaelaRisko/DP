@@ -5,10 +5,13 @@
  * Masters Thesis
  * Generating Prime Numbers for Embedded Cryptographic Applications
  * 
+ * Program
+ * bneasy.c
+ *
  * Student: Bc. Michaela Risko
  * Supervisor: doc. Ing. Milos Drutarovsky, PhD.
  *
- * REV 2.0 @ 30.01.2018
+ * REV 2.1 @ 27.04.2018
  */
  
 #include <stdio.h>
@@ -22,6 +25,9 @@
 #include "openssl/x509.h"
 #include "openssl/rand.h"
 
+/*
+ * This function seeds the local random BIGNUM generator
+ */
 void BNEASY_seedRandomBN(int seed) {
 	srand(seed);
 }
@@ -208,30 +214,4 @@ BIGNUM* BNEASY_findNextPrime(BIGNUM* fromNum, bool sizeSafe, bool skip) {
 	}
 	return number;
 }
-
-///*
-// * This function generates a BIGNUM* instance of size 'numSize' which is a
-// * global variable. It sets MSB to 1, all other bits to 0
-// * 
-// * @param numBits
-// *			the number of bits in the generated number
-// *
-// * @return a random BIGNUM* instance
-// */
-//BIGNUM* BNEASY_generateStrictBN(int numBits) {
-//	BIGNUM* strict = BNEASY_generateRandomBN(numBits);
-//	int strictSize = BN_num_bits(strict);
-//	int success;
-//	//clear all bits
-//	int i;
-//	for(i = 0; i < BN_num_bits(strict); i++) {
-//		success = BN_clear_bit(strict, i);
-//		BNUTIL_successCheck(success, "generateStrictBN", "Error clearing bit");
-//	}
-//	//set MSB to 1
-//	success = BN_set_bit(strict, strictSize - 1);
-//	BNUTIL_successCheck(success, "generateStrictBN", "Error setting bit");
-//	
-//	return strict;
-//}
 

@@ -5,12 +5,14 @@
  * Masters Thesis
  * Generating Prime Numbers for Embedded Cryptographic Applications
  * 
+ * Program
+ * bnutil.c
+ *
  * Student: Bc. Michaela Risko
  * Supervisor: doc. Ing. Milos Drutarovsky, PhD.
  *
- * REV 2.0 @ 30.01.2018
+ * REV 2.1 @ 27.04.2018
  */
- 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -92,12 +94,21 @@ void BNUTIL_setTimestampNow(char* timestamp) {
 	}
 }
 
-
 //Start from 0, BNUTIL_getSmallPrime(0) ---> 2
+/*
+ * This function returns the n-th small prime from the first 1000 primes
+ * where n is 'primeNo'.
+ * Example: BNUTIL_getSmallPrime(0) ---> 2
+ *          BNUTIL_getSmallPrime(1) ---> 3
+ *          BNUTIL_getSmallPrime(4) ---> 1
+ *
+ * @param timestamp
+ *			the variable to which the string timestamp will be set
+ */
 BIGNUM* BNUTIL_getSmallPrime(int primeNo) {
 	int primes[] = 
 	{
-		3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,
+		2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,
 		97,101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,
 		181,191,193,197,199,211,223,227,229,233,239,241,251,257,263,269,271,
 		277,281,283,293,307,311,313,317,331,337,347,349,353,359,367,373,379,
